@@ -19,14 +19,14 @@ print(f"Knockout Population: N = {len(population_knockout)} matches")
 print("\n --- Population parameters ---")
 print(f"Group Stage: mean = {population_group['Total_Fouls'].mean():.2f}, "
       f"std = {population_group['Total_Fouls'].std():.2f}")
-print(f"Knocknout : mean = {population_knockout['Total_Fouls'].mean():.2f}, "
+print(f"Knockout : mean = {population_knockout['Total_Fouls'].mean():.2f}, "
       f"std = {population_knockout['Total_Fouls'].std():.2f}")
 
 # Draw the samples using Simple Random Sampling
 sample_group = population_group.sample(
     n= SAMPLE_SIZE_PER_GROUP, random_state=RANDOM_SEED, replace=False
 )
-sample_knockout = population_group.sample(
+sample_knockout = population_knockout.sample(
     n=SAMPLE_SIZE_PER_GROUP, random_state=RANDOM_SEED, replace=False
 )
 
