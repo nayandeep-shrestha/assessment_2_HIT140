@@ -1,43 +1,41 @@
 import pandas as pd
 
 RANDOM_SEED = 42
-SAMPLE_SIZE_PER_GROUP = 30
+SAMPLE_SIZE = 60
 
 # Loading the wrangled data
 wrangled = pd.read_csv("wrangled_worldcup2026_fouls.csv")
+population = wrangled[["match_report", "round", "date", "Stage", "Total_Fouls"]]
 
-analysis_vars = wrangled[['match_report', 'round', 'date', 'Stage', 'Total_Fouls']]
+N= len(population)
+n_group = (population["Stage"] == "Group Stage").sum()
+n_knockout = (population["Stage"] == "Knockout").sum()
+print(f"Full Population : N = {N} matches"
+      f"({n_group} Group Stage, {n_knockout} Knockot)")
 
-# Defining populations
-population_group = analysis_vars[analysis_vars['Stage'] == 'Group Stage']
-population_knockout = analysis_vars[analysis_vars['Stage'] == 'Knockout']
+# SRS - Pooled
+sample = population.sample(n=SAMPLE_SIZE, random_state=RANDOM_SEED, replace=False)
 
-print("---- Population sizes ----")
-print(f"Group Stage Population: N = {len(population_group)} matches")
-print(f"Knockout Population: N = {len(population_knockout)} matches")
+print(f"\nDrew a pooled SRS of n={SAMPLE_SIZE} from N={N}"
+      f" no stratification by Stage")
 
-print("\n --- Population parameters ---")
-print(f"Group Stage: mean = {population_group['Total_Fouls'].mean():.2f}, "
-      f"std = {population_group['Total_Fouls'].std():.2f}")
-print(f"Knockout : mean = {population_knockout['Total_Fouls'].mean():.2f}, "
-      f"std = {population_knockout['Total_Fouls'].std():.2f}")
-
-# Draw the samples using Simple Random Sampling
-sample_group = population_group.sample(
-    n= SAMPLE_SIZE_PER_GROUP, random_state=RANDOM_SEED, replace=False
-)
-sample_knockout = population_knockout.sample(
-    n=SAMPLE_SIZE_PER_GROUP, random_state=RANDOM_SEED, replace=False
-)
-
-sample = pd.concat([sample_group, sample_knockout], ignore_index=True)
-
-# Quick Sanity chekc on the sample
-print("\n --- Sample Sizes ---")
+# Report the resulting stage composition
+print(f"\n Resulting stage composition of the sample")
 print(sample["Stage"].value_counts())
 
-print("\n --- Sample means (Total_Fouls) - quick check against population ---")
-print(sample.groupby("Stage")["Total_Fouls"].mean().round(2))
+print("\nSample vs population means (Total_Fouls), for a quick sanity check:")
+for stage in ["Group Stage", "Knockout"]:
+    pop_mean = population[population["Stage"] == stage]["Total_Fouls"].mean()
+    samp_subset = sample[sample["Stage"] == stage]["Total_Fouls"]
+    print(f" {stage}: population mean = {pop_mean:.2f},"
+          f"sample n = {len(samp_subset)}, sample mean = {samp_subset.mean():.2f}")
+
+# Flag if either subgroup ended up too thin for later steps
+counts = sample["Stage"].value_counts()
+for stage, count in counts.items():
+    if count <30 :
+        print(f"\nNote: the {stage} subgroup in this sample has only {count} matches, below the usual n>=30 rule of thumb for"
+              f"the CLT. This is an expected, honest consequence of pooled SRS when one stage is a minority of the population")
 
 # Saving
 sample.to_csv("sample_worldcup2026_fouls.csv", index=False)
