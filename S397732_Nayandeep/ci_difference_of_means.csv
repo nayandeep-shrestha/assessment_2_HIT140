@@ -1,0 +1,2 @@
+mean_difference,se,df,ci_lower,ci_upper,includes_zero
+2.8,1.966,58,-1.14,6.73,True

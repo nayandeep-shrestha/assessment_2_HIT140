@@ -40,7 +40,7 @@ groups = ["Group Stage", "Knockout"]
 data_to_plot = [sample[sample["Stage"] == g]['Total_Fouls'] for g in groups]
 plt.boxplot(data_to_plot, labels=groups, showmeans=True)
 plt.ylabel("Total fouls per match (both teams combined)")
-plt.title("Distribution of Total Fouls per match: Group Stage vs Knockout\n(FIFA World Cup 2026, sample n=30 per group)")
+plt.title("Distribution of Total Fouls per match: Group Stage vs Knockout\n(FIFA World Cup 2026, sample n=60)")
 plt.grid(axis="y", alpha = 0.3)
 plt.tight_layout()
 plt.savefig("boxplot_fouls_by_stage.png", dpi = 150)
