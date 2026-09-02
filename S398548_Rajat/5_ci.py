@@ -82,7 +82,7 @@ diff_margin=diff_t_critical*se_diff
 diff_lower, diff_upper = mean_diff-diff_margin, mean_diff+diff_margin
 
 print(f'n{int(confidence_level*100)}% confidence intervals for the difference in means ')
-print("Mean difference(Winner- Loser)={mean_diff:.2f}percentage points")
+print(f"Mean difference(Winner- Loser)={mean_diff:.2f}percentage points")
 print(f"Pooled SE={se_diff:.3f},df={diff_df}, t_critical={diff_t_critical:.3f}")
 print(f"95% CI for the difference:[{diff_lower:.2f},{diff_upper:.2f}]")
 
