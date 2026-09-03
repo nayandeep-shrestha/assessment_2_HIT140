@@ -25,7 +25,7 @@ se=np.sqrt((s1**2/n1)+(s2**2/n2))
 t_stat=(mean1-mean2)/se
 
 #conservative degree of freedom--the smaller of the two samples own df
-df=min(n1-2,n2-1)
+df=min(n1-1,n2-2)
 
 print(f'\n----t-statistics----')
 print(f'standard error={se:.4f}')
